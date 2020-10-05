@@ -66,6 +66,11 @@ class EventhumanController extends Controller
         return $event;
     }
 
+    /**
+     * @param $id_event
+     * @return array|string|Response
+     * @throws HttpException
+     */
     public function actionCreate($id_event)
     {
         if (!PermissionManager::can("EventHuman update"))
@@ -93,6 +98,11 @@ class EventhumanController extends Controller
         }
     }
 
+    /**
+     * @param $id
+     * @return Response
+     * @throws HttpException
+     */
     public function actionDelete($id)
     {
         if (!PermissionManager::can("EventHuman update"))

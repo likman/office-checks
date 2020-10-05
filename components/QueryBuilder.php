@@ -5,6 +5,11 @@ namespace app\components;
 use Yii;
 use yii\base\Model;
 
+/**
+ * Homegrown querybuilder
+ * Class QueryBuilder
+ * @package app\components
+ */
 class QueryBuilder
 {
     private $_db;

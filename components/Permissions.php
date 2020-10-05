@@ -13,18 +13,16 @@ class Permissions
     public function __construct($id_role)
     {
         $this->_id_role = $id_role;
+        $this->loadPermissionsFromDb();
     }
 
     /**
-     * Проверка пермишенов
-     * @param $permissionName
+     * Check permission
+     * @param $permission_name
      * @return bool
      */
     public function has($permission_name)
     {
-        if (!isset($this->_permissions)) {
-            $this->loadPermissionsFromDb();
-        }
         $permission=$this->_permissions[$permission_name];
         if (!isset($permission)) {
             return false;

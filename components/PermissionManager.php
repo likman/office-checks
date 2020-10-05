@@ -29,7 +29,7 @@ class PermissionManager
 
 
     /**
-     * Проверка пермишенов
+     * Check user permission by name
      * @param $permissionName
      * @return bool
      */

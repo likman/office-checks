@@ -40,6 +40,10 @@ class EventController extends Controller
         ];
     }
 
+    /**
+     * @return string
+     * @throws HttpException
+     */
     public function actionIndex()
     {
         if (!PermissionManager::can('Event'))
@@ -53,6 +57,10 @@ class EventController extends Controller
         ]);
     }
 
+    /**
+     * @return array|string|Response
+     * @throws HttpException
+     */
     public function actionCreate()
     {
         if (!PermissionManager::can('Event update'))
@@ -80,6 +88,11 @@ class EventController extends Controller
         }
     }
 
+    /**
+     * @param $id
+     * @return array|string
+     * @throws HttpException
+     */
     public function actionUpdate($id)
     {
         if (!PermissionManager::can("Event update"))
@@ -109,7 +122,11 @@ class EventController extends Controller
         }
     }
 
-
+    /**
+     * @param $id
+     * @return string
+     * @throws HttpException
+     */
     public function actionView($id)
     {
         if (!PermissionManager::can("Event"))
@@ -120,6 +137,11 @@ class EventController extends Controller
         ]);
     }
 
+    /**
+     * @param $id
+     * @return Response
+     * @throws HttpException
+     */
     public function actionDelete($id)
     {
         if (!PermissionManager::can("Event update"))
@@ -130,6 +152,11 @@ class EventController extends Controller
         return Helper::redirectPrevious($this, "GET");
     }
 
+    /**
+     * @param $id
+     * @return Response
+     * @throws HttpException
+     */
     public function actionRestore($id)
     {
         if (!PermissionManager::can("Event update"))

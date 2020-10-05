@@ -44,6 +44,10 @@ class ImportController extends Controller
         ];
     }
 
+    /**
+     * @return string
+     * @throws HttpException
+     */
     public function actionIndex()
     {
         if (!PermissionManager::can("Import"))
@@ -54,6 +58,10 @@ class ImportController extends Controller
         ]);
     }
 
+    /**
+     * @return string
+     * @throws HttpException
+     */
     public function actionUpload()
     {
         if (!PermissionManager::can("Import"))

@@ -8,6 +8,7 @@ use app\models\Human;
 use app\models\HumanForm;
 use app\models\HumanSearch;
 use app\models\User;
+use Da\QrCode\Exception\UnknownWriterException;
 use Yii;
 use yii\bootstrap\ActiveForm;
 use yii\filters\AccessControl;
@@ -42,6 +43,10 @@ class HumanController extends Controller
         ];
     }
 
+    /**
+     * @return string
+     * @throws HttpException
+     */
     public function actionIndex()
     {
         if (!PermissionManager::can("Human"))
@@ -55,6 +60,10 @@ class HumanController extends Controller
         ]);
     }
 
+    /**
+     * @return array|string|Response
+     * @throws HttpException
+     */
     public function actionCreate()
     {
         if (!PermissionManager::can("Human update"))
@@ -82,6 +91,11 @@ class HumanController extends Controller
         }
     }
 
+    /**
+     * @param $id
+     * @return array|string
+     * @throws HttpException
+     */
     public function actionUpdate($id)
     {
         if (!PermissionManager::can("Human update"))
@@ -112,15 +126,25 @@ class HumanController extends Controller
         }
     }
 
+    /**
+     * @return string
+     * @throws UnknownWriterException
+     */
     public function actionGetmyqrcode()
     {
-        $user=User::getCurrentUser();
-        $qr=$user->getQrCode();
+        $user = User::getCurrentUser();
+        $qr = $user->getQrCode();
         Yii::$app->response->format = Response::FORMAT_RAW;
         Yii::$app->response->headers->add('Content-Type', $qr->getContentType());
         return $qr->writeString();
     }
 
+    /**
+     * @param $id
+     * @return string
+     * @throws HttpException
+     * @throws UnknownWriterException
+     */
     public function actionGetqrcode($id)
     {
         if (!PermissionManager::can("Human delete"))
@@ -133,6 +157,11 @@ class HumanController extends Controller
     }
 
 
+    /**
+     * @param $id
+     * @return string
+     * @throws HttpException
+     */
     public function actionView($id)
     {
         if (!PermissionManager::can("Human"))
@@ -146,6 +175,11 @@ class HumanController extends Controller
         ]);
     }
 
+    /**
+     * @param $id
+     * @return Response
+     * @throws HttpException
+     */
     public function actionDelete($id)
     {
         if (!PermissionManager::can("Human update"))
@@ -156,6 +190,11 @@ class HumanController extends Controller
         return Helper::redirectPrevious($this, "GET");
     }
 
+    /**
+     * @param $id
+     * @return Response
+     * @throws HttpException
+     */
     public function actionRestore($id)
     {
         if (!PermissionManager::can("Human"))

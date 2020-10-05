@@ -25,7 +25,7 @@ class MikrotikRdpAllower
         $query->where('to-ports', 3389);
         $response = $client->query($query)->read();
         if (!isset($response[0]['.id'])) {
-            return false; //нет правила с нужным портом
+            return false; //rule is not exists
         }
         foreach ($response as $resp) {
             $query = new Query('/ip/firewall/nat/set');

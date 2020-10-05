@@ -10,6 +10,7 @@ use app\models\checks\EventCheck;
 use app\models\Human;
 use app\models\LoginForm;
 use app\models\User;
+use Da\QrCode\Exception\UnknownWriterException;
 use Yii;
 use yii\web\Controller;
 use yii\web\HttpException;
@@ -54,6 +55,11 @@ class ApiController extends Controller
         return true;
     }
 
+    /**
+     * Login by auth token
+     * @return bool
+     * @throws HttpException
+     */
     private function loginByAuthToken()
     {
         $auth_token = Yii::$app->request->post('auth_token');
@@ -81,6 +87,11 @@ class ApiController extends Controller
         throw new HttpException(401, 'Не авторизован');
     }
 
+    /**
+     * Get auth token by username and password
+     * @return array
+     * @throws HttpException
+     */
     public function actionGetAuthToken()
     {
         if (!Helper::checkRequiredArrayVariables(Yii::$app->request->post(), ['username', 'password'])) {
@@ -95,6 +106,12 @@ class ApiController extends Controller
         return ['result' => $user->auth_token];
     }
 
+    /**
+     * Get my QR code
+     * @return string
+     * @throws HttpException
+     * @throws UnknownWriterException
+     */
     public function actionGetMyQrCode()
     {
         if (!Helper::checkRequiredArrayVariables(Yii::$app->request->post(), ['auth_token'])) {
@@ -108,6 +125,11 @@ class ApiController extends Controller
         return $qr->writeString();
     }
 
+    /**
+     * Get today event list
+     * @return array
+     * @throws HttpException
+     */
     public function actionGetTodayEvents()
     {
         if (!Helper::checkRequiredArrayVariables(Yii::$app->request->post(), ['auth_token'])) {
@@ -120,6 +142,11 @@ class ApiController extends Controller
         return ['result' => Event::getTodayEvents(User::getCurrentUser()->id)];
     }
 
+    /**
+     * Check in event by unique code
+     * @return array
+     * @throws HttpException
+     */
     public function actionCheckIn()
     {
         if (!Helper::checkRequiredArrayVariables(Yii::$app->request->post(), ['auth_token', 'id_event', 'unique_code'])) {

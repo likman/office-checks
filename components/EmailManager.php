@@ -4,6 +4,11 @@ namespace app\components;
 use Yii;
 use function count;
 
+/**
+ * Class EmailManager
+ *
+ * @package app\components
+ */
 class EmailManager
 {
     private $_subject;
@@ -145,38 +150,6 @@ class EmailManager
         $this->_message->mailer->adapter->addCustomHeader("List-Unsubscribe",'<'.$unsubscribe_link.'>');
         $this->_message->setCharset('UTF-8');
         $this->_message->send();
-    }
-
-    private function removeUnsubscribedFromEmails() {
-        $new_email_array=[];
-        if (is_array($this->_to)) {
-            foreach ($this->_to as $email) {
-                if (!$this->isEmailUnsubscribed($email)) {
-                    $new_email_array[]=$email;
-                }
-            }
-        } else {
-            if (!$this->isEmailUnsubscribed($this->_to)) {
-                $new_email_array[]=$this->_to;
-            }
-        }
-        $this->_to=$new_email_array;
-    }
-
-    private function isEmailUnsubscribed($email) {
-        if (!Helper::isOk($email)) {
-            return false;
-        }
-        $sql='select id from r_email_unsubscribe_list 
-              where email=:email';
-        $params=[
-            ':email'=>$email,
-        ];
-        $rows=Yii::$app->db->createCommand($sql)->bindValues($params)->cache(30)->queryAll();
-        if (count($rows)>0) {
-            return true;
-        }
-        return false;
     }
 
     public static function convertEmailsToArray($emails)

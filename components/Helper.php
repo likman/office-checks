@@ -11,61 +11,9 @@ use yii\web\Request;
 class Helper
 {
 
-    public static function toUtf8($val, $dotrim = true)
-    {
-        $val = mb_convert_encoding($val, 'utf8', 'cp1251');
-        if ($dotrim)
-            return trim($val);
-        else return $val;
-    }
-
-    public static function toCp1251($val, $dotrim = true)
-    {
-        $val = mb_convert_encoding($val, 'cp1251', 'utf8');
-        if ($dotrim)
-            return trim($val);
-        else return $val;
-    }
-
     public static function isEmpty($value)
     {
         return $value === '' || $value === [] || $value === null || is_string($value) && trim($value) === '';
-    }
-
-    public static function quoteDBStr($value)
-    {
-        if (Helper::isOk($value)) {
-            $value = str_replace("'", '"', $value);
-            return "'" . $value . "'";
-        } else
-            return "null";
-    }
-
-    public static function andFilterWhere($params)
-    {
-        $model = $params['model'];
-        $attr = $params['model_field'];
-        if (is_array($model->$attr))
-            return "";
-        if (trim($model->$attr) != '') {
-            if (isset($params['menu'])) {
-                $menu = $params['menu']['menu'];
-                $menu_field = $params['menu']['menu_field'];
-                if (isset($menu->$menu_field) && $menu->$menu_field != "")
-                    return $params['sql'];
-            }
-            switch ($params['operand']) {
-                case '=':
-                    $params['sql'] .= ' AND ' . $params['sql_field'] . '=:' . $params['model_field'];
-                    break;
-                case 'like':
-                    $params['sql'] .= ' AND LOWER(' . $params['sql_field'] . ") LIKE CONCAT('%',:" . $params['model_field'] . ",'%')";
-                    // $params['sql'] .= " AND ".$params['sql_field']." CONTAINING :".$params['model_field'];
-                    $model->$attr = mb_strtolower($model->$attr);
-                    break;
-            }
-        }
-        return $params['sql'];
     }
 
     public static function checkRequiredArrayVariables($array, $required_variables)
@@ -78,32 +26,12 @@ class Helper
         return true;
     }
 
-    public static function copyModelData($from, $to)
-    {
-        $attributes = $from->getAttributes();
-        foreach ($attributes as $attribute => $value) {
-            if (isset($value) && $to->hasProperty($attribute))
-                $to->$attribute = $value;
-        }
-        return $to;
-    }
-
     public static function isOk($param)
     {
-        if (isset($param) && ($param != "") && ($param != "Loading ..."))
+        if (isset($param) && ($param != ""))
             return true;
         else
             return false;
-    }
-
-    public static function encodeRFC5987ValueChars($str)
-    {
-        // See http://tools.ietf.org/html/rfc5987#section-3.2.1
-        // For better readability within headers, add back the characters escaped by rawurlencode but still allowable
-        // Although RFC3986 reserves "!" (%21), RFC5987 does not
-        return preg_replace_callback('@%(2[1346B]|5E|60|7C)@', function ($matches) {
-            return chr('0x' . $matches[1]);
-        }, rawurlencode($str));
     }
 
     public static function generateRandomString($length = 10)
@@ -120,17 +48,6 @@ class Helper
     public static function generateRandomNumber($length = 10)
     {
         return random_int(pow(10,$length), pow(10,$length+1));
-    }
-
-    public static function prepareParams($sql, $orig_params)
-    {
-        $params=[];
-        foreach ($orig_params as $key=>$value)
-        {
-            if (mb_strpos($sql,$key)!==false)
-                $params[$key]=$value;
-        }
-        return $params;
     }
 
     public static function getLastMySQLId($db="db")
@@ -272,12 +189,12 @@ class Helper
 
 
     /**
-     * Внесение в массив дат между начальной и конечной по порядку в заданном формате
+     * Create an array of dates from start_date to end_date
      * @param $start_date
      * @param $end_date
      * @param $in_format
      * @param $out_format
-     * @return array массив дат
+     * @return array dates
      */
     public static function getArrayOfDatesFromPeriod($start_date, $end_date, $in_format='Y-m-d', $out_format='Y-m-d')
     {

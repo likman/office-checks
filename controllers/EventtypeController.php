@@ -5,12 +5,15 @@ namespace app\controllers;
 use app\components\PermissionManager;
 use app\models\checks\EventType;
 use app\models\checks\EventTypeSearch;
+use Throwable;
 use Yii;
+use yii\db\StaleObjectException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 class EventtypeController extends Controller
 {
@@ -38,6 +41,10 @@ class EventtypeController extends Controller
         ];
     }
 
+    /**
+     * @return string
+     * @throws HttpException
+     */
     public function actionIndex()
     {
         if (!PermissionManager::can("EventType"))
@@ -51,6 +58,12 @@ class EventtypeController extends Controller
         ]);
     }
 
+    /**
+     * @param $id
+     * @return string
+     * @throws HttpException
+     * @throws NotFoundHttpException
+     */
     public function actionView($id)
     {
         if (!PermissionManager::can("EventType"))
@@ -69,6 +82,10 @@ class EventtypeController extends Controller
         throw new NotFoundHttpException('Страница не найдена.');
     }
 
+    /**
+     * @return string|Response
+     * @throws HttpException
+     */
     public function actionCreate()
     {
         if (!PermissionManager::can("EventType update"))
@@ -84,6 +101,12 @@ class EventtypeController extends Controller
         ]);
     }
 
+    /**
+     * @param $id
+     * @return string|Response
+     * @throws HttpException
+     * @throws NotFoundHttpException
+     */
     public function actionUpdate($id)
     {
         if (!PermissionManager::can("EventType update"))
@@ -99,6 +122,14 @@ class EventtypeController extends Controller
         ]);
     }
 
+    /**
+     * @param $id
+     * @return Response
+     * @throws HttpException
+     * @throws NotFoundHttpException
+     * @throws Throwable
+     * @throws StaleObjectException
+     */
     public function actionDelete($id)
     {
         if (!PermissionManager::can("EventType update"))

@@ -40,6 +40,11 @@ class EventcheckController extends Controller
         ];
     }
 
+    /**
+     * @param $id_event
+     * @return string
+     * @throws HttpException
+     */
     public function actionIndex($id_event)
     {
         if (!PermissionManager::can("EventCheck"))
@@ -55,6 +60,12 @@ class EventcheckController extends Controller
         ]);
     }
 
+    /**
+     * Check in event
+     * @param $id_event
+     * @param $id_human
+     * @throws HttpException
+     */
     public function actionCheckin($id_event, $id_human)
     {
         if (!PermissionManager::can("EventCheck self check"))

@@ -1,0 +1,70 @@
+
+.selector-form
+{
+    width: 500px;
+    background-color: #f5f5f5;
+    background-image: none;
+    background-origin: padding-box;
+    background-size: auto;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+
+    padding-bottom: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    margin-bottom:10px;
+
+    float: left;
+    position:relative;
+    min-height:1px;
+    z-index: 100;
+}
+
+
+.form-group
+{
+    margin-bottom: 0px;
+}
+
+.selector-menu label
+{
+    margin-bottom: 0px;
+}
+
+.selector-form h4
+{
+    background: url(/merchandising/web/images/arrow-square.gif) no-repeat right -51px;
+    padding-bottom: 1px;
+    cursor: pointer;
+}
+
+.selector-form h4.active
+{
+    background-position: right 5px;
+}
+
+.modal {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, .8 ) url('/merchandising/web/images/loader.gif')
+    50% 50%
+    no-repeat;
+}
+
+/* When the body has the loading class, we turn
+   the scrollbar off with overflow:hidden */
+body.loading {
+    overflow: hidden;
+}
+
+/* Anytime the body has the loading class, our
+   modal element will be visible */
+body.loading .modal {
+    display: block;
+}

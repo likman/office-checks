@@ -2,6 +2,7 @@
 
 namespace app\models\checks;
 
+use app\components\Helper;
 use app\models\User;
 use Yii;
 use yii\db\ActiveRecord;
@@ -98,6 +99,17 @@ class Event extends ActiveRecord
     {
         $this->id_event_type = 1;
         $this->start_time = date("Y-m-d H:i:s");
+    }
+
+    public static function hasAnyEvent($date)
+    {
+        $sql = "select id from events
+              where is_active='1' and start_time like :event_date";
+        $event = Yii::$app->db->createCommand($sql, [':event_date' => $date . '%'])->queryOne();
+        if (Helper::isOk($event['id'])) {
+            return true;
+        }
+        return false;
     }
 
     public function beforeSave($insert)

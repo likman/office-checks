@@ -3,21 +3,13 @@ namespace app\components\auto;
 
 use app\components\EmailManager;
 use app\components\Helper;
-use app\models\stewards\Human;
+use app\models\Human;
 use Yii;
 
 class ExportChecks
 {
     private $_start_date;
     private $_end_date;
-
-    private function getHuman($id_human)
-    {
-        $human=new Human();
-        $human->id_human=$id_human;
-        $human->loadById();
-        return $human;
-    }
 
     private function getWorkTime($check_time_in, Human $human)
     {
@@ -55,31 +47,30 @@ class ExportChecks
 
     public function doWork($start_date, $end_date)
     {
-        $this->_start_date=$start_date;
-        $this->_end_date=$end_date;
-        $dates=Helper::getArrayOfDatesFromPeriod($start_date, $end_date);
-        $data=[];
-        $d=[];
-        $sql="select r_events.id_event, r_events.event_date, r_event_checks.check_time_in, r_event_checks.id_human
-              from r_events
-              left join r_event_checks on r_event_checks.id_event=r_events.id_event
-              where r_events.deleted='0' and r_events.event_date between :start_date and :end_date
-              and not exists (select 1 from s_humans 
-              where s_humans.id_post='4' and s_humans.id_human=r_event_checks.id_human)
-              order by r_event_checks.id_human asc, r_events.event_date asc";
-        $rows=Yii::$app->db->createCommand($sql,[':start_date'=>$start_date, ':end_date'=>$end_date])->queryAll();
-        $id_human='';
-        $human=null;
-        foreach ($rows as $row)
-        {
-            if ($id_human!=$row['id_human']) {
-                if ($id_human!='') {
-                    $data[]=$d;
+        $this->_start_date = $start_date;
+        $this->_end_date = $end_date;
+        $dates = Helper::getArrayOfDatesFromPeriod($start_date, $end_date);
+        $data = [];
+        $d = [];
+        $sql = "select events.id, events.start_time, event_checks.check_time_in, event_checks.id_human
+              from events
+              left join event_checks on event_checks.id_event=events.id
+              where events.is_active='1' and events.start_time between :start_date and :end_date
+              and not exists (select 1 from humans 
+              where humans.id_role='4' and humans.id=event_checks.id_human)
+              order by event_checks.id_human asc, events.start_time asc";
+        $rows = Yii::$app->db->createCommand($sql, [':start_date' => $start_date . ' 00:00:00', ':end_date' => $end_date . ' 23:59:59'])->queryAll();
+        $id_human = '';
+        $human = null;
+        foreach ($rows as $row) {
+            if ($id_human != $row['id_human']) {
+                if ($id_human != '') {
+                    $data[] = $d;
                 }
-                $id_human=$row['id_human'];
-                $human=$this->getHuman($row['id_human']);
+                $id_human = $row['id_human'];
+                $human = Human::findOne(['id' => $row['id_human']]);
                 $d = [];
-                $d['human_name'] = $human->human_name;
+                $d['human_name'] = $human->name;
                 foreach ($dates as $date) {
                     $d[$date] = '';
                 }
@@ -109,8 +100,7 @@ class ExportChecks
             .' во вложении.';
         EmailManager::build()
             ->setFrom(Yii::$app->params['robotEmail'])
-            ->setTo(['office@nsteam.ru',
-                    'kabanov@nsteam.ru'])
+            ->setTo(Yii::$app->params['adminEmail'])
             ->setSubject('Выгрузка по рабочему времени')
             ->setTextBody($text)
             ->attachContent($csv, ['fileName' => 'report.csv',])

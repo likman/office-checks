@@ -12,13 +12,14 @@ $config = [
     'controllerNamespace' => 'app\commands',
     'components' => [
         'cache' => [
-            'class' => 'yii\caching\MemCache',
-            'servers' => [
-                [
-                    'host' => 'localhost',
-                    'port' => 11211,
-                ],
-            ],
+            /* 'class' => 'yii\caching\MemCache',
+             'servers' => [
+                 [
+                     'host' => 'localhost',
+                     'port' => 11211,
+                 ],
+             ],*/
+            'class' => 'yii\caching\FileCache',
         ],
         'mailer' => [
             'class'            => 'zyx\phpmailer\Mailer',

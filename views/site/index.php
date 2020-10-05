@@ -6,6 +6,7 @@
 
 /* @var $id_human integer */
 
+use app\components\Helper;
 use app\components\PermissionManager;
 use app\models\checks\Event;
 use yii\helpers\Html;
@@ -63,7 +64,7 @@ $this->title = Yii::$app->name;
                     }
                     ?>
                     <?php
-                    if (PermissionManager::can("RdpAuth")) {
+                    if (PermissionManager::can("RdpAuth") && Helper::isOk(Yii::$app->params['mikrotikHost'])) {
                         ?>
                         <li>
                             <?= Html::a('Получить доступ к рабочему столу', ['site/rdpauth']); ?>

@@ -29,13 +29,14 @@ $config = [
             'cookieValidationKey' => 'gsSgiiihYhdfhdfhdf333ovgENblUlPieLvvWrneHq',
         ],
         'cache' => [
-            'class' => 'yii\caching\MemCache',
+            'class' => 'yii\caching\FileCache',
+            /*'class' => 'yii\caching\MemCache',
             'servers' => [
                 [
                     'host' => 'localhost',
                     'port' => 11211,
                 ],
-            ],
+            ],*/
         ],
         'file_cache' => [
             'class' => 'yii\caching\FileCache',

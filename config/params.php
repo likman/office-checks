@@ -5,7 +5,7 @@ return [
     'robotEmail' => ["robot@test.ru" => "Робот"],
     'cachePeriodStandard' => "360",
 
-    'mikrotikHost' => '192.168.0.1',
-    'mikrotikUser' => 'admin',
+    'mikrotikHost' => '',
+    'mikrotikUser' => '',
     'mikrotikPassword' => '',
 ];
